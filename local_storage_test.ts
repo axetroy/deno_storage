@@ -54,7 +54,7 @@ createTestDomain("axetroy.xyz", function testLocalStorageInit(
   assertEquals(Deno.readFileSync(mapFilename).byteLength, 2);
 
   assertEquals(localStorage.length, 0);
-  assertEquals(localStorage.key.length, 0);
+  assertEquals(localStorage.key(), []);
 });
 
 createTestDomain("deno.land", function testSimpleSetAndGet(
@@ -81,6 +81,8 @@ createTestDomain("deno.land", function testSimpleSetAndGet(
 
   assertEquals(localStorage.getItem(key), value);
   assertEquals(localStorage.getItem("unknown_key"), null);
+  assertEquals(localStorage.length, 1);
+  assertEquals(localStorage.key(), [key]);
 });
 
 createTestDomain("example.com", function testAppendMultipleKeys(
@@ -108,6 +110,9 @@ createTestDomain("example.com", function testAppendMultipleKeys(
     assertEquals(json[key1], { start: 0, length: value1Byte.byteLength });
     assertEquals(localStorage.getItem(key1), value1);
   }
+
+  assertEquals(localStorage.length, 1);
+  assertEquals(localStorage.key(), [key1]);
 
   const key2 = "hello";
   const value2 = "world";
@@ -138,6 +143,9 @@ createTestDomain("example.com", function testAppendMultipleKeys(
     });
     assertEquals(localStorage.getItem(key2), value2);
   }
+
+  assertEquals(localStorage.length, 2);
+  assertEquals(localStorage.key(), [key1, key2]);
 
   assertEquals(localStorage.getItem(key1), value1);
   assertEquals(localStorage.getItem(key2), value2);
@@ -169,6 +177,9 @@ createTestDomain("example1.com", function testResetMultipleKeys(
     assertEquals(localStorage.getItem(key1), value1);
   }
 
+  assertEquals(localStorage.length, 1);
+  assertEquals(localStorage.key(), [key1]);
+
   const key2 = "hello";
   const value2 = "world";
   const value2Byte = new TextEncoder().encode(value2);
@@ -199,6 +210,9 @@ createTestDomain("example1.com", function testResetMultipleKeys(
     assertEquals(localStorage.getItem(key2), value2);
   }
 
+  assertEquals(localStorage.length, 2);
+  assertEquals(localStorage.key(), [key1, key2]);
+
   const newValue = "new value";
   // set three key
   {
@@ -226,6 +240,11 @@ createTestDomain("example1.com", function testResetMultipleKeys(
     });
     assertEquals(localStorage.getItem(key1), newValue);
   }
+
+  assertEquals(localStorage.length, 2);
+  // TODO: fix key reverse
+  // it should be [key1, key2]
+  assertEquals(localStorage.key(), [key2, key1]);
 
   assertEquals(localStorage.getItem(key1), newValue);
   assertEquals(localStorage.getItem(key2), value2);
