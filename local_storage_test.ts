@@ -5,13 +5,15 @@ import * as path from "https://deno.land/std/path/mod.ts";
 import { readJsonSync } from "https://deno.land/std/fs/read_json.ts";
 import { LocalStorage } from "./local_storage.ts";
 
+const home = Deno.homeDir();
+
 ensureDirSync("localstorage");
 
 function createTestDomain(
   domain: string,
   fn: (storageFilename: string, mapFilename: string) => void
 ) {
-  const domainDir = path.resolve("localstorage", domain);
+  const domainDir = path.join(home, ".deno", "localstorage", domain);
   ensureDirSync(domainDir);
 
   const storageFilename = path.join(domainDir, "storage");
@@ -46,7 +48,7 @@ createTestDomain("axetroy.xyz", function testLocalStorageInit(
   assertEquals(Deno.readFileSync(storageFilename).byteLength, 0);
   assertEquals(Deno.readFileSync(mapFilename).byteLength, 0);
 
-  const localStorage = new LocalStorage(storageFilename, mapFilename);
+  const localStorage = new LocalStorage({ domain: "axetroy.xyz" });
 
   assertEquals(Deno.readFileSync(storageFilename).byteLength, 0);
   assertEquals(Deno.readFileSync(mapFilename).byteLength, 2);
@@ -59,7 +61,7 @@ createTestDomain("deno.land", function testSimpleSetAndGet(
   storageFilename,
   mapFilename
 ) {
-  const localStorage = new LocalStorage(storageFilename, mapFilename);
+  const localStorage = new LocalStorage({ domain: "deno.land" });
 
   const key = "foo";
   const value = "bar";
@@ -85,7 +87,7 @@ createTestDomain("example.com", function testAppendMultipleKeys(
   storageFilename,
   mapFilename
 ) {
-  const localStorage = new LocalStorage(storageFilename, mapFilename);
+  const localStorage = new LocalStorage({ domain: "example.com" });
 
   const key1 = "foo";
   const value1 = "bar";
@@ -145,7 +147,7 @@ createTestDomain("example1.com", function testResetMultipleKeys(
   storageFilename,
   mapFilename
 ) {
-  const localStorage = new LocalStorage(storageFilename, mapFilename);
+  const localStorage = new LocalStorage({ domain: "example1.com" });
 
   const key1 = "foo";
   const value1 = "bar";

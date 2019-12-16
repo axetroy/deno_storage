@@ -1,6 +1,7 @@
 import { readJsonSync } from "https://deno.land/std/fs/read_json.ts";
 import { writeJsonSync } from "https://deno.land/std/fs/write_json.ts";
 import { existsSync } from "https://deno.land/std/fs/exists.ts";
+import { join } from "https://deno.land/std/path/mod.ts";
 
 import { Storage } from "./storage.ts";
 const { openSync } = Deno;
@@ -16,13 +17,23 @@ interface Map {
   [k: string]: Location;
 }
 
+interface Options {
+  domain: string;
+}
+
+const home = Deno.homeDir();
+
 export class LocalStorage implements Storage {
   private [mapSymbol]: Map = {};
-  constructor(
-    private storageFilename: string,
-    private storageMapFilename: string
-  ) {
-    if (storageMapFilename && existsSync(storageMapFilename)) {
+  private storageFilename: string;
+  private storageMapFilename: string;
+  constructor(options: Options) {
+    const domainDir = join(home, ".deno", "localstorage", options.domain);
+    this.storageFilename = join(domainDir, "storage");
+    const storageMapFilename = (this.storageMapFilename =
+      this.storageFilename + ".map");
+
+    if (existsSync(storageMapFilename)) {
       try {
         const json = readJsonSync(storageMapFilename) as Map;
 
