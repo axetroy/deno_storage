@@ -29,7 +29,13 @@ export class LocalStorage extends Storage {
   private storageMapFilename: string;
   constructor(options: Options) {
     super();
-    const domainDir = join(home, ".deno", "localstorage", options.domain);
+    const domainDir = join(
+      home,
+      ".deno",
+      "storage",
+      "localstorage",
+      options.domain
+    );
     this.storageFilename = join(domainDir, "storage");
     const storageMapFilename = (this.storageMapFilename =
       this.storageFilename + ".map");

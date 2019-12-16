@@ -13,7 +13,7 @@ function createTestDomain(
   domain: string,
   fn: (storageFilename: string, mapFilename: string) => void
 ) {
-  const domainDir = path.join(home, ".deno", "localstorage", domain);
+  const domainDir = path.join(home, ".deno", "storage", "localstorage", domain);
   ensureDirSync(domainDir);
 
   const storageFilename = path.join(domainDir, "storage");

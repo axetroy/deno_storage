@@ -27,8 +27,8 @@ principle:
 
 1. Isolation using a domain name as a namespace with `--domain` flag
 2. File system based to storage data
-   1. `$HOME/.deno/localstorage/:domain/storage`: Store `value` in `setItem (key, value)`
-   2. `$HOME/.deno/localstorage/:domain/storage.map` Store `key` in `setItem (key, value)`
+   1. `$HOME/.deno/storage/localstorage/:domain/storage`: Store `value` in `setItem (key, value)`
+   2. `$HOME/.deno/storage/localstorage/:domain/storage.map` Store `key` in `setItem (key, value)`
 
 ## Usage
 
