@@ -133,7 +133,7 @@ export class LocalStorage extends Storage {
 
     // delete data from file
     if (location) {
-      // TODO: Optimize algorithms to increase speed
+      // TODO: Optimize algorithms to improve performance
       const bytes = Deno.readFileSync(this.storageFilename);
       const start = location.start;
       const end = location.start + location.length;
