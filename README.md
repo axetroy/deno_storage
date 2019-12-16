@@ -43,7 +43,8 @@ This is just an exploration of Deno's localStorage
 
 There are still many problems
 
-- Not using a mature K-V database
+- Not using a mature K-V database, eg. Chrome uses leveldb
+
 - Problems with performance (Not fast enough)
 
 ## License
