@@ -1,11 +1,12 @@
 [![Build Status](https://github.com/axetroy/deno_storage/workflows/test/badge.svg)](https://github.com/axetroy/deno_storage/actions)
 
-
 # deno_storage
 
 This is an exploration of Deno's Storage APIs.
 
-#### Goal
+explore how to implement the LocalStorage interface.
+
+#### Design Goal
 
 ```bash
 $ cat setItem.ts
