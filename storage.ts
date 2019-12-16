@@ -26,4 +26,16 @@ export class Storage implements IStorage {
   clear() {
     return;
   }
+  [Deno.customInspect](): string {
+    const keys = this.key();
+
+    const str = keys
+      .map((key: string) => {
+        return `${key}: "${this.getItem(key)}"`;
+      })
+      .concat([`length: ${this.length}`])
+      .join(", ");
+
+    return `Storage {${str}}`;
+  }
 }

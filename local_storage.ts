@@ -7,6 +7,8 @@ import { Storage } from "./storage.ts";
 const { openSync } = Deno;
 
 const mapSymbol = Symbol("the_map_symbol_that_user_should_not_use");
+const storageFilenameSymbol = Symbol("the_map_symbol_that_user_should_not_use");
+const storageFileMapSymbol = Symbol("the_map_symbol_that_user_should_not_use");
 
 interface Location {
   start: number;
@@ -25,8 +27,8 @@ const home = Deno.homeDir();
 
 export class LocalStorage extends Storage {
   private [mapSymbol]: Map = {};
-  private storageFilename: string;
-  private storageMapFilename: string;
+  private [storageFilenameSymbol]: string;
+  private [storageFileMapSymbol]: string;
   constructor(options: Options = { domain: "defaults" }) {
     super();
     const domainDir = join(
@@ -36,9 +38,9 @@ export class LocalStorage extends Storage {
       "localstorage",
       options.domain
     );
-    this.storageFilename = join(domainDir, "storage");
-    const storageMapFilename = (this.storageMapFilename =
-      this.storageFilename + ".map");
+    this[storageFilenameSymbol] = join(domainDir, "storage");
+    const storageMapFilename = (this[storageFileMapSymbol] =
+      this[storageFilenameSymbol] + ".map");
 
     if (existsSync(storageMapFilename)) {
       try {
@@ -57,7 +59,7 @@ export class LocalStorage extends Storage {
     return Object.keys(this[mapSymbol]);
   }
   getItem(key: string) {
-    const file = openSync(this.storageFilename, "r");
+    const file = openSync(this[storageFilenameSymbol], "r");
 
     try {
       const location = this[mapSymbol][key];
@@ -82,7 +84,7 @@ export class LocalStorage extends Storage {
   }
 
   setItem(key: string, value: string) {
-    const { len: currentLength } = Deno.statSync(this.storageFilename);
+    const { len: currentLength } = Deno.statSync(this[storageFilenameSymbol]);
 
     // If the file size exceeds 10M, an exception should be thrown
     // This is also the upper limit of browser storage
@@ -92,7 +94,7 @@ export class LocalStorage extends Storage {
 
     let err: Error;
 
-    const file = openSync(this.storageFilename, "r+");
+    const file = openSync(this[storageFilenameSymbol], "r+");
 
     try {
       const bytes = new TextEncoder().encode(value);
@@ -130,7 +132,7 @@ export class LocalStorage extends Storage {
       throw err;
     }
 
-    writeJsonSync(this.storageMapFilename, this[mapSymbol]);
+    writeJsonSync(this[storageFileMapSymbol], this[mapSymbol]);
   }
 
   removeItem(key: string) {
@@ -140,7 +142,7 @@ export class LocalStorage extends Storage {
     // delete data from file
     if (location) {
       // TODO: Optimize algorithms to improve performance
-      const bytes = Deno.readFileSync(this.storageFilename);
+      const bytes = Deno.readFileSync(this[storageFilenameSymbol]);
       const start = location.start;
       const end = location.start + location.length;
 
@@ -157,7 +159,7 @@ export class LocalStorage extends Storage {
         index++;
       }
 
-      Deno.writeFileSync(this.storageFilename, newBytes);
+      Deno.writeFileSync(this[storageFilenameSymbol], newBytes);
 
       // If the data is not the last element
       // so we should update the location
@@ -172,7 +174,7 @@ export class LocalStorage extends Storage {
         }
 
         // update map file
-        writeJsonSync(this.storageMapFilename, this[mapSymbol]);
+        writeJsonSync(this[storageFileMapSymbol], this[mapSymbol]);
       }
     }
 
