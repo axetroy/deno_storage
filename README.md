@@ -1,6 +1,6 @@
 # deno_storage
 
-This is just an exploration of Deno's localStorage
+This is an exploration of Deno's Storage APIs.
 
 #### Goal
 
