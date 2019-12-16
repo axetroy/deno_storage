@@ -37,7 +37,7 @@ localStorage.setItem("foo", "bar");
 localStorage.getItem("foo");
 ```
 
-## Don't apply production environment
+## Don't use it in production environment
 
 This is just an exploration of Deno's localStorage
 
