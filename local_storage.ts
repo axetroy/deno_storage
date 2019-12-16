@@ -27,7 +27,7 @@ export class LocalStorage extends Storage {
   private [mapSymbol]: Map = {};
   private storageFilename: string;
   private storageMapFilename: string;
-  constructor(options: Options) {
+  constructor(options: Options = { domain: "defaults" }) {
     super();
     const domainDir = join(
       home,

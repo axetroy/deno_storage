@@ -23,6 +23,8 @@ $ deno run getItem.ts
 null
 ```
 
+if run without flag `--domain`. then use defaults domain
+
 principle:
 
 1. Isolation using a domain name as a namespace with `--domain` flag
