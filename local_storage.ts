@@ -23,11 +23,12 @@ interface Options {
 
 const home = Deno.homeDir();
 
-export class LocalStorage implements Storage {
+export class LocalStorage extends Storage {
   private [mapSymbol]: Map = {};
   private storageFilename: string;
   private storageMapFilename: string;
   constructor(options: Options) {
+    super();
     const domainDir = join(home, ".deno", "localstorage", options.domain);
     this.storageFilename = join(domainDir, "storage");
     const storageMapFilename = (this.storageMapFilename =
@@ -152,7 +153,6 @@ export class LocalStorage implements Storage {
 
       Deno.writeFileSync(this.storageFilename, newBytes);
 
-      // TODO: update location
       // If the data is not the last element
       // so we should update the location
       if (end !== bytes.byteLength) {

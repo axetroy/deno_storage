@@ -6,7 +6,7 @@ interface Map {
   [k: string]: string;
 }
 
-export class SessionStorage implements Storage {
+export class SessionStorage extends Storage {
   private [mapSymbol]: Map = {};
   get length() {
     return this.key().length;
