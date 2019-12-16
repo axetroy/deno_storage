@@ -22,6 +22,8 @@ $ deno run getItem.ts
 null
 ```
 
+## Usage
+
 ```typescript
 import {
   LocalStorage,
